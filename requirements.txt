@@ -1,0 +1,13 @@
+# PhishGuard Core Dependencies (Phase 0 Foundation)
+# Compatible with Python 3.12+
+
+# Core Configuration & Validation
+pydantic>=2.7.0
+python-dotenv>=1.0.0
+
+# Testing & Quality Assurance
+pytest>=8.0.0
+
+# NOTE: Future phase dependencies (e.g. scikit-learn, tensorflow, fastapi, uvicorn)
+# are defined as optional dependency groups in pyproject.toml and will be installed
+# during their respective phases according to Phase-by-Phase requirements.

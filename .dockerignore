@@ -1,0 +1,29 @@
+# Python & Virtual Environments
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+
+# Raw Data and Non-Production Notebooks
+data/
+notebooks/
+docs/
+tests/
+
+# Git & CI/CD
+.git/
+.github/
+.gitignore
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+
+# Local build artifacts
+dist/
+build/
+*.egg-info/
+node_modules/
+frontend/
