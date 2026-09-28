@@ -17,6 +17,10 @@ DATA_DIR: Final[Path] = PROJECT_ROOT / "data"
 RAW_DATA_DIR: Final[Path] = DATA_DIR / "raw"
 INTERIM_DATA_DIR: Final[Path] = DATA_DIR / "interim"
 PROCESSED_DATA_DIR: Final[Path] = DATA_DIR / "processed"
+RAW_DATASET_FILE: Final[Path] = RAW_DATA_DIR / "PhiUSIIL_Phishing_URL_Dataset.csv"
+RAW_DATASET_SHA256: Final[str] = (
+    "a236549cd369cd80bd478ff8e1779cbf44c58d5c3f79f7a51a1adbed7d06d1c6"
+)
 
 # Artifact Directories
 ARTIFACTS_DIR: Final[Path] = PROJECT_ROOT / "artifacts"
