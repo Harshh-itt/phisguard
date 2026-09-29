@@ -178,7 +178,7 @@ def validate_raw_dataset(
     missing_values = 0
 
     try:
-        with open(path, "r", encoding="utf-8", errors="replace") as f:
+        with open(path, encoding="utf-8", errors="replace") as f:
             reader = csv.reader(f)
             try:
                 raw_header = next(reader)
@@ -229,7 +229,7 @@ def validate_raw_dataset(
                     )
 
                 # Check missing / null cells
-                for col_idx, val in enumerate(row):
+                for _col_idx, val in enumerate(row):
                     if val == "" or val is None:
                         missing_values += 1
 
@@ -264,8 +264,9 @@ def validate_raw_dataset(
     phishing_count = class_counts.get("0", 0)
 
     if legitimate_count != EXPECTED_LEGITIMATE_COUNT:
-        errors.append(
-            f"Legitimate count mismatch: expected {EXPECTED_LEGITIMATE_COUNT}, got {legitimate_count}"
+       errors.append(
+        f"Legitimate count mismatch: expected {EXPECTED_LEGITIMATE_COUNT}, "
+        f"got {legitimate_count}"
         )
 
     if phishing_count != EXPECTED_PHISHING_COUNT:
@@ -313,8 +314,14 @@ def main() -> int:
     print(f"Total Columns:      {report.total_columns} (Expected: {len(EXPECTED_RAW_COLUMNS)})")
     print(f"Target Present:     {report.target_column_present} ('{TARGET_COLUMN}')")
     print(f"Class Distribution: {report.class_counts}")
-    print(f"  - Legitimate (1): {report.class_counts.get('1', 0):,} (Expected: {EXPECTED_LEGITIMATE_COUNT:,})")
-    print(f"  - Phishing (0):   {report.class_counts.get('0', 0):,} (Expected: {EXPECTED_PHISHING_COUNT:,})")
+    print(
+        f"  - Legitimate (1): {report.class_counts.get('1', 0):,} "
+        f"(Expected: {EXPECTED_LEGITIMATE_COUNT:,})"
+)
+    print(
+        f"  - Phishing (0):   {report.class_counts.get('0', 0):,} "
+        f"(Expected: {EXPECTED_PHISHING_COUNT:,})"
+)
     print(f"Missing Values:     {report.missing_values_count} (Expected: 0)")
     print("-" * 70)
 

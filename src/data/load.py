@@ -37,7 +37,7 @@ def load_raw_header(file_path: Path | str | None = None) -> list[str]:
         List of cleaned column names (with BOM stripped if present).
     """
     path = get_raw_dataset_path(file_path)
-    with open(path, "r", encoding="utf-8", errors="replace") as f:
+    with open(path, encoding="utf-8", errors="replace") as f:
         reader = csv.reader(f)
         raw_header = next(reader)
         return normalize_header(raw_header)
@@ -64,7 +64,7 @@ def stream_raw_records(
     path = get_raw_dataset_path(file_path)
     header = load_raw_header(path)
 
-    with open(path, "r", encoding="utf-8", errors="replace") as f:
+    with open(path, encoding="utf-8", errors="replace") as f:
         reader = csv.reader(f)
         next(reader)  # Skip header row
 

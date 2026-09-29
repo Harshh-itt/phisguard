@@ -29,7 +29,7 @@ def test_raw_dataset_sha256_checksum() -> None:
 
 
 def test_validate_raw_dataset_full_integrity() -> None:
-    """Run full validation on the raw dataset and assert perfect compliance with UCI specification."""
+    """Run full validation on the raw dataset and assert perfect compliance."""
     report = validate_raw_dataset(RAW_DATASET_FILE, verify_checksum=True)
 
     assert report.is_valid is True, f"Validation failed with errors: {report.errors}"
