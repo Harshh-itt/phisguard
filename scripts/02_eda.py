@@ -1,10 +1,7 @@
-from pathlib import Path
 import sys
+from pathlib import Path
 
-import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = PROJECT_ROOT / "data" / "raw" / "PhiUSIIL_Phishing_URL_Dataset.csv"
