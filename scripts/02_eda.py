@@ -120,3 +120,167 @@ if len(conflicting_domains) > 0:
         .head(30)
         .to_string(index=False)
     )
+
+print("\n========== NUMERIC FEATURE SUMMARY ==========")
+
+numeric_cols = df.select_dtypes(include="number").columns.tolist()
+
+print("Number of numeric columns:", len(numeric_cols))
+print("\nNumeric columns:")
+print(numeric_cols)
+
+print("\nDescriptive statistics:")
+print(
+    df[numeric_cols]
+    .describe()
+    .T
+    .to_string()
+)
+
+print("\n========== NUMERIC FEATURE CARDINALITY ==========")
+
+feature_cardinality = (
+    df[numeric_cols]
+    .nunique()
+    .sort_values()
+)
+
+print(feature_cardinality.to_string())
+
+print("\n========== CLASS-WISE NUMERIC SUMMARY ==========")
+
+class_summary = (
+    df.groupby("label")[numeric_cols]
+    .mean()
+    .T
+)
+
+print(class_summary.to_string())
+
+print("\n========== EXTREME VALUE ANALYSIS ==========")
+
+continuous_cols = [
+    col
+    for col in numeric_cols
+    if df[col].nunique() > 10 and col != "label"
+]
+
+for col in continuous_cols:
+    q1 = df[col].quantile(0.25)
+    q3 = df[col].quantile(0.75)
+    iqr = q3 - q1
+    upper_bound = q3 + 1.5 * iqr
+
+    extreme_count = (df[col] > upper_bound).sum()
+
+    print(
+        f"{col}: "
+        f"Q1={q1:.4f}, "
+        f"Q3={q3:.4f}, "
+        f"upper_bound={upper_bound:.4f}, "
+        f"extreme_values={extreme_count}"
+    )
+
+
+print("\n========== CATEGORICAL FEATURE SUMMARY ==========")
+
+categorical_cols = df.select_dtypes(
+    include=["object", "string"]
+).columns.tolist()
+
+for col in categorical_cols:
+    print(f"\n{col}:")
+    print("  Unique values:", df[col].nunique(dropna=False))
+    print("  Missing values:", df[col].isna().sum())
+    print("  Top 10 values:")
+    print(df[col].value_counts(dropna=False).head(10).to_string())
+
+print("\n========== FEATURE SOURCE INVENTORY ==========")
+
+url_derived_features = [
+    "URLLength",
+    "Domain",
+    "DomainLength",
+    "IsDomainIP",
+    "TLD",
+    "URLSimilarityIndex",
+    "CharContinuationRate",
+    "TLDLegitimateProb",
+    "URLCharProb",
+    "TLDLength",
+    "NoOfSubDomain",
+    "HasObfuscation",
+    "NoOfObfuscatedChar",
+    "ObfuscationRatio",
+    "NoOfLettersInURL",
+    "LetterRatioInURL",
+    "NoOfDegitsInURL",
+    "DegitRatioInURL",
+    "NoOfEqualsInURL",
+    "NoOfQMarkInURL",
+    "NoOfAmpersandInURL",
+    "NoOfOtherSpecialCharsInURL",
+    "SpacialCharRatioInURL",
+    "IsHTTPS",
+]
+
+webpage_derived_features = [
+    "LineOfCode",
+    "LargestLineLength",
+    "HasTitle",
+    "Title",
+    "HasFavicon",
+    "Robots",
+    "IsResponsive",
+    "NoOfURLRedirect",
+    "NoOfSelfRedirect",
+    "HasDescription",
+    "NoOfPopup",
+    "NoOfiFrame",
+    "HasExternalFormSubmit",
+    "HasSocialNet",
+    "HasSubmitButton",
+    "HasHiddenFields",
+    "HasPasswordField",
+    "Bank",
+    "Pay",
+    "Crypto",
+    "HasCopyrightInfo",
+    "NoOfImage",
+    "NoOfCSS",
+    "NoOfJS",
+    "NoOfSelfRef",
+    "NoOfEmptyRef",
+    "NoOfExternalRef",
+]
+
+metadata_features = [
+    "FILENAME",
+]
+
+target_feature = "label"
+
+print("URL-derived features:", len(url_derived_features))
+print("Webpage-derived features:", len(webpage_derived_features))
+print("Metadata features:", len(metadata_features))
+print("Target:", target_feature)
+
+print("\nURL-derived:")
+print(url_derived_features)
+
+print("\nWebpage-derived:")
+print(webpage_derived_features)
+
+print("\nMetadata:")
+print(metadata_features)
+
+print("\n========== FEATURE-TARGET CORRELATION ==========")
+
+correlations = (
+    df[numeric_cols]
+    .corr()["label"]
+    .drop("label")
+    .sort_values(key=abs, ascending=False)
+)
+
+print(correlations.to_string())
