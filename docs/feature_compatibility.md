@@ -32,8 +32,8 @@ PhishGuard currently extracts nine static URL features.
 | `is_https` | 1 when the parsed scheme is HTTPS, otherwise 0 |
 | `is_ip_address` | 1 when the parsed hostname is recognized as an IP address |
 | `digit_count` | Number of digit characters in the URL |
-| `dot_count` | Number of dots in the URL |
-| `hyphen_count` | Number of hyphens in the URL |
+| `dot_count` | Number of dots in the parsed hostname |
+| `hyphen_count` | Number of hyphens in the parsed hostname |
 | `path_length` | Length of the parsed URL path |
 | `query_length` | Length of the parsed URL query |
 

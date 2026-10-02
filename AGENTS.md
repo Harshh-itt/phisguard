@@ -74,3 +74,50 @@ Build **PhishGuard**, an explainable, defensive phishing URL classification syst
 5. **Run Tests / Lint Checks**: Ensure all tests pass.
 6. **Inspect Diff**: Verify that only relevant, expected files were created or modified.
 7. **Report**: Summarize files changed, commands run, test results, and next phase readiness.
+
+---
+
+## Additional Repository Protection and Approval Rules
+
+### 1. Preserve Existing Work
+- Never overwrite, delete, rename, or restructure existing files without explicit user approval.
+- Before modifying an existing source file, explain the proposed change and its necessity.
+- Prefer creating new documentation files when the task is documentation-only.
+- Never perform unrelated refactoring or cleanup.
+
+### 2. Git Safety
+- Never execute `git reset --hard`, force-push, or destructive Git operations.
+- Never commit or push without explicit user approval.
+- Inspect existing Git status before beginning work.
+- Do not discard existing user changes.
+- Report all staged and unstaged changes accurately.
+
+### 3. Evidence-Based Documentation
+- Distinguish verified facts, assumptions, and unresolved questions.
+- Never invent feature formulas, dataset statistics, experimental results, or model metrics.
+- Cite the available dataset documentation or repository evidence for technical claims.
+- Do not claim a feature is reproducible unless its calculation can be established.
+
+### 4. Approval Checkpoints
+- Work in small, reviewable tasks.
+- Before implementing a phase, present a concise plan and identify affected files.
+- Stop after the requested task and report the outcome.
+- Wait for user approval before proceeding to the next phase.
+- Do not interpret permission to inspect or document as permission to modify source code or train models.
+
+### 5. Beginner-Friendly Communication
+- Explain technical decisions in clear language.
+- Provide actual commands and their purpose.
+- Report actual test and lint results.
+- Never claim an operation succeeded without verifying its result.
+
+### 6. Current Authorized Scope
+The current authorized work is limited to:
+
+1. Feature provenance audit.
+2. Data leakage and validation risk investigation.
+3. Final feature selection documentation.
+
+Model training, source-code refactoring, backend/frontend implementation, and deployment are outside this authorization.
+
+---
