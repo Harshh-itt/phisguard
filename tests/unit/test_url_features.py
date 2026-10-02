@@ -84,3 +84,55 @@ def test_extract_features_from_ip_url():
 
     assert features["is_ip_address"] == 1
     assert features["dot_count"] == 3
+
+
+def test_valid_port():
+    result = parse_url("https://example.com:8080/login")
+
+    assert result["hostname"] == "example.com"
+    assert result["port"] == 8080
+
+
+def test_port_out_of_range():
+    with pytest.raises(ValueError):
+        parse_url("https://example.com:70000")
+
+
+def test_ipv6_address():
+    result = parse_url("https://[2001:db8::1]/login")
+
+    assert result["is_ip_address"] == 1
+    assert result["hostname"] == "2001:db8::1"
+
+
+def test_whitespace_inside_hostname():
+    with pytest.raises(ValueError):
+        parse_url("https://bad host.com/login")
+
+
+def test_non_string_url():
+    with pytest.raises(ValueError):
+        parse_url(123)
+
+
+def test_url_with_query_and_fragment():
+    result = parse_url(
+        "https://example.com/search?q=test#section"
+    )
+
+    assert result["path"] == "/search"
+    assert result["query"] == "q=test"
+
+def test_hostname_with_invalid_character():
+    with pytest.raises(ValueError):
+        parse_url("https://exam ple.com")
+
+
+def test_hostname_with_empty_label():
+    with pytest.raises(ValueError):
+        parse_url("https://example..com")
+
+
+def test_invalid_ipv4_address():
+    with pytest.raises(ValueError):
+        parse_url("https://999.999.999.999")

@@ -73,3 +73,40 @@ Provenance-sensitive dataset features remain excluded until their calculation me
 This is an initial design contract, not a finalized model input schema.
 
 The feature definitions, parsing behavior, edge cases, and production eligibility must be validated through implementation and tests before model training.
+
+## 8. Initial Implementation Status
+
+The initial nine-feature extraction implementation has been completed.
+
+### Implemented Features
+
+* `url_length`
+* `hostname_length`
+* `is_https`
+* `is_ip_address`
+* `digit_count`
+* `dot_count`
+* `hyphen_count`
+* `path_length`
+* `query_length`
+
+### Implemented Components
+
+* URL parsing and validation
+* Static feature extraction
+* Fixed feature ordering
+* Schema version `1.0.0`
+* Feature type and value validation
+* Conversion to an ordered model input vector
+* Unit tests for parsing, extraction, and schema validation
+
+### Pending Work
+
+* Additional URL feature calculations
+* Public suffix and subdomain parsing rules
+* Unicode and internationalized domain handling
+* Expanded malformed URL test coverage
+* Training and inference integration
+* Final production feature approval
+
+The current schema is an initial implementation and must not be treated as the final production model contract.

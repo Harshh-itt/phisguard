@@ -24,13 +24,34 @@ def parse_url(url: str) -> dict:
         if not hostname:
             raise ValueError("URL must contain a valid hostname.")
 
+        if any(char.isspace() for char in hostname):
+            raise ValueError("Hostname cannot contain whitespace.")
+
         port = parsed.port
 
         try:
             ipaddress.ip_address(hostname)
             is_ip_address = True
+
         except ValueError:
             is_ip_address = False
+
+            if all(char.isdigit() or char == "." for char in hostname):
+                raise ValueError("Invalid IPv4 address.") from None
+
+            labels = hostname.split(".")
+
+            if any(not label for label in labels):
+                raise ValueError("Hostname cannot contain empty labels.") from None
+
+            if any(
+                not all(
+                    char.isalnum() or char == "-"
+                    for char in label
+                )
+                for label in labels
+            ):
+                raise ValueError("Hostname contains invalid characters.") from None
 
         return {
             "scheme": scheme,
@@ -44,6 +65,7 @@ def parse_url(url: str) -> dict:
 
     except ValueError as error:
         raise ValueError(f"Invalid URL: {error}") from error
+
 
 
 def extract_features(url: str) -> dict:
