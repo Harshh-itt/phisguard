@@ -8,8 +8,19 @@ from src.config import (
     ALLOW_URL_FETCH,
     ARTIFACTS_DIR,
     DATA_DIR,
+    DISQUALIFIED_RAW_COLUMNS,
+    EXCLUDED_METADATA_COLUMNS,
+    EXCLUDED_UNVERIFIED_HEURISTIC_COLUMNS,
+    EXCLUDED_WEBPAGE_COLUMNS,
+    EXPECTED_DUPLICATE_URL_COUNT,
+    EXPECTED_INTERIM_CLASS_COUNTS,
+    EXPECTED_INTERIM_LEGITIMATE_COUNT,
+    EXPECTED_INTERIM_PHISHING_COUNT,
+    EXPECTED_INTERIM_ROW_COUNT,
+    EXPECTED_RAW_ROW_COUNT,
     HEADLINE_MODELS,
     INTERIM_DATA_DIR,
+    INTERIM_DATASET_FILE,
     LABEL_MAPPING,
     METADATA_DIR,
     MODELS_DIR,
@@ -96,3 +107,50 @@ def test_settings_initialization() -> None:
     assert settings.default_model in HEADLINE_MODELS
     assert settings.random_seed == 42
     assert isinstance(settings.allowed_origins, list)
+
+
+def test_interim_dataset_path() -> None:
+    """Verify Phase 3 interim dataset path resolution."""
+    assert INTERIM_DATASET_FILE.parent == INTERIM_DATA_DIR
+    assert INTERIM_DATASET_FILE.name == "cleaned_phiusiil.csv"
+    assert INTERIM_DATA_DIR.exists()
+
+
+def test_phase3_interim_invariants() -> None:
+    """Verify Phase 3 data quality and post-deduplication dimension invariants."""
+    assert EXPECTED_RAW_ROW_COUNT == 235795
+    assert EXPECTED_DUPLICATE_URL_COUNT == 425
+    assert EXPECTED_INTERIM_ROW_COUNT == EXPECTED_RAW_ROW_COUNT - EXPECTED_DUPLICATE_URL_COUNT
+    assert EXPECTED_INTERIM_ROW_COUNT == 235370
+
+    # Class distribution invariants
+    assert EXPECTED_INTERIM_LEGITIMATE_COUNT == 134850
+    assert EXPECTED_INTERIM_PHISHING_COUNT == 100520
+    assert (
+        EXPECTED_INTERIM_LEGITIMATE_COUNT + EXPECTED_INTERIM_PHISHING_COUNT
+        == EXPECTED_INTERIM_ROW_COUNT
+    )
+    assert EXPECTED_INTERIM_CLASS_COUNTS == {
+        "1": EXPECTED_INTERIM_LEGITIMATE_COUNT,
+        "0": EXPECTED_INTERIM_PHISHING_COUNT,
+    }
+
+
+def test_raw_column_exclusion_constants() -> None:
+    """Verify Phase 2 audit provenance exclusion constants."""
+    assert len(EXCLUDED_METADATA_COLUMNS) == 1
+    assert "FILENAME" in EXCLUDED_METADATA_COLUMNS
+
+    assert len(EXCLUDED_WEBPAGE_COLUMNS) == 29
+    assert "LineOfCode" in EXCLUDED_WEBPAGE_COLUMNS
+    assert "HasTitle" in EXCLUDED_WEBPAGE_COLUMNS
+    assert "NoOfImage" in EXCLUDED_WEBPAGE_COLUMNS
+
+    assert len(EXCLUDED_UNVERIFIED_HEURISTIC_COLUMNS) == 3
+    assert "URLSimilarityIndex" in EXCLUDED_UNVERIFIED_HEURISTIC_COLUMNS
+    assert "TLDLegitimateProb" in EXCLUDED_UNVERIFIED_HEURISTIC_COLUMNS
+    assert "URLCharProb" in EXCLUDED_UNVERIFIED_HEURISTIC_COLUMNS
+
+    # All 33 disqualified columns combined (1 metadata + 29 webpage/DOM + 3 heuristics)
+    assert len(DISQUALIFIED_RAW_COLUMNS) == 33
+    assert len(set(DISQUALIFIED_RAW_COLUMNS)) == 33  # Check uniqueness

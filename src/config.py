@@ -21,6 +21,7 @@ RAW_DATASET_FILE: Final[Path] = RAW_DATA_DIR / "PhiUSIIL_Phishing_URL_Dataset.cs
 RAW_DATASET_SHA256: Final[str] = (
     "a236549cd369cd80bd478ff8e1779cbf44c58d5c3f79f7a51a1adbed7d06d1c6"
 )
+INTERIM_DATASET_FILE: Final[Path] = INTERIM_DATA_DIR / "cleaned_phiusiil.csv"
 
 # Artifact Directories
 ARTIFACTS_DIR: Final[Path] = PROJECT_ROOT / "artifacts"
@@ -46,6 +47,64 @@ LABEL_MAPPING: Final[dict[int, str]] = {
 # The EXACT TWO headline predictive models for this project
 HEADLINE_MODELS: Final[tuple[str, str]] = ("decision_tree", "ann")
 HeadlineModelType = Literal["decision_tree", "ann"]
+
+# Phase 3 Data Quality & Leakage Invariants (Interim Dataset Specification)
+EXPECTED_RAW_ROW_COUNT: Final[int] = 235795
+EXPECTED_DUPLICATE_URL_COUNT: Final[int] = 425
+EXPECTED_INTERIM_ROW_COUNT: Final[int] = 235370
+EXPECTED_INTERIM_LEGITIMATE_COUNT: Final[int] = 134850
+EXPECTED_INTERIM_PHISHING_COUNT: Final[int] = 100520
+EXPECTED_INTERIM_CLASS_COUNTS: Final[dict[str, int]] = {
+    "1": EXPECTED_INTERIM_LEGITIMATE_COUNT,
+    "0": EXPECTED_INTERIM_PHISHING_COUNT,
+}
+
+# Raw Dataset Column Exclusion Categories (Phase 2 Provenance Audit Invariants)
+EXCLUDED_METADATA_COLUMNS: Final[tuple[str, ...]] = ("FILENAME",)
+
+EXCLUDED_WEBPAGE_COLUMNS: Final[tuple[str, ...]] = (
+    "LineOfCode",
+    "LargestLineLength",
+    "HasTitle",
+    "Title",
+    "DomainTitleMatchScore",
+    "URLTitleMatchScore",
+    "HasFavicon",
+    "Robots",
+    "IsResponsive",
+    "NoOfURLRedirect",
+    "NoOfSelfRedirect",
+    "HasDescription",
+    "NoOfPopup",
+    "NoOfiFrame",
+    "HasExternalFormSubmit",
+    "HasSocialNet",
+    "HasSubmitButton",
+    "HasHiddenFields",
+    "HasPasswordField",
+    "Bank",
+    "Pay",
+    "Crypto",
+    "HasCopyrightInfo",
+    "NoOfImage",
+    "NoOfCSS",
+    "NoOfJS",
+    "NoOfSelfRef",
+    "NoOfEmptyRef",
+    "NoOfExternalRef",
+)
+
+EXCLUDED_UNVERIFIED_HEURISTIC_COLUMNS: Final[tuple[str, ...]] = (
+    "URLSimilarityIndex",
+    "TLDLegitimateProb",
+    "URLCharProb",
+)
+
+DISQUALIFIED_RAW_COLUMNS: Final[tuple[str, ...]] = (
+    *EXCLUDED_METADATA_COLUMNS,
+    *EXCLUDED_WEBPAGE_COLUMNS,
+    *EXCLUDED_UNVERIFIED_HEURISTIC_COLUMNS,
+)
 
 # Permanent Architectural & Safety Invariants
 STATIC_ANALYSIS_ONLY: Final[bool] = True
