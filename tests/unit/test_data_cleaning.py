@@ -1,7 +1,6 @@
 """Unit tests for Phase 3 Data Quality and Cleaning Pipeline."""
 
 import csv
-
 from pathlib import Path
 
 import pytest
@@ -9,14 +8,13 @@ import pytest
 from src.config import (
     DISQUALIFIED_RAW_COLUMNS,
 )
-
 from src.data.clean import (
     REQUIRED_CLEANING_COLUMNS,
     clean_dataset,
     clean_records,
 )
-
 from src.data.validate import EXPECTED_RAW_COLUMNS
+
 
 def write_mock_dataset(path: Path, rows: list[dict[str, str]]) -> None:
 
