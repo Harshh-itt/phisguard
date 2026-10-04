@@ -1,15 +1,16 @@
-import numpy as np
-from sklearn.preprocessing import StandardScaler
 import json
 from pathlib import Path
 
 import joblib
+import numpy as np
+from sklearn.preprocessing import StandardScaler
 
 from src.features.schema import (
     FEATURE_NAMES,
     FEATURE_SCHEMA_VERSION,
     features_to_vector,
 )
+
 
 def build_feature_matrix(feature_rows: list[dict]) -> np.ndarray:
     """Convert extracted feature dictionaries into a canonical matrix."""
@@ -32,7 +33,7 @@ def build_feature_matrix(feature_rows: list[dict]) -> np.ndarray:
 def create_ann_scaler() -> StandardScaler:
     """Create a fresh scaler for ANN numerical features."""
 
-    return StandardScaler()    
+    return StandardScaler()
 
 def validate_schema_compatibility(
     saved_version: str,
@@ -49,7 +50,7 @@ def validate_schema_compatibility(
     if saved_feature_names != FEATURE_NAMES:
         raise ValueError(
             "Saved feature names or ordering do not match the current schema."
-        )    
+        )
 
 def save_ann_scaler(
     scaler: StandardScaler,
@@ -130,4 +131,4 @@ def load_ann_scaler(
     if scaler.n_features_in_ != len(FEATURE_NAMES):
         raise ValueError("Saved scaler feature count is incompatible.")
 
-    return scaler    
+    return scaler

@@ -1,19 +1,18 @@
 
-import numpy as np
-import pytest
-
-from src.features.extract import extract_features
-from src.features.schema import FEATURE_NAMES
-from src.preprocessing.pipeline import build_feature_matrix
-
 import json
 
+import numpy as np
 import pytest
 from sklearn.preprocessing import StandardScaler
 
+from src.features.extract import extract_features
+from src.features.schema import FEATURE_NAMES, FEATURE_SCHEMA_VERSION
 from src.preprocessing.pipeline import (
+    build_feature_matrix,
+    create_ann_scaler,
     load_ann_scaler,
     save_ann_scaler,
+    validate_schema_compatibility,
 )
 
 
@@ -56,9 +55,8 @@ def test_invalid_feature_row_is_rejected():
     with pytest.raises(ValueError, match="Missing features"):
         build_feature_matrix([features])
 
-from sklearn.preprocessing import StandardScaler
 
-from src.preprocessing.pipeline import create_ann_scaler
+
 
 
 def test_create_ann_scaler_returns_unfitted_scaler():
@@ -83,8 +81,8 @@ def test_ann_scaler_standardizes_features():
     np.testing.assert_allclose(scaled.mean(axis=0), [0, 0], atol=1e-10)
     np.testing.assert_allclose(scaled.std(axis=0), [1, 1], atol=1e-10)
 
-from src.features.schema import FEATURE_SCHEMA_VERSION
-from src.preprocessing.pipeline import validate_schema_compatibility
+
+
 
 
 def test_matching_schema_is_accepted():
@@ -109,7 +107,7 @@ def test_feature_order_mismatch_is_rejected():
         validate_schema_compatibility(
             FEATURE_SCHEMA_VERSION,
             incorrect_names,
-        )    
+        )
 
 def test_save_and_load_ann_scaler(tmp_path):
     scaler = StandardScaler()
