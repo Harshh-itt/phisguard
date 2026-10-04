@@ -67,3 +67,20 @@ def test_binary_feature_validation():
 
     with pytest.raises(ValueError, match="must be 0 or 1"):
         validate_features(features)
+
+def test_boolean_feature_is_rejected():
+    features = extract_features("https://example.com")
+    features["url_length"] = True
+
+    with pytest.raises(TypeError, match="must be an integer"):
+        validate_features(features)
+
+
+def test_vector_order_is_independent_of_dictionary_order():
+    features = extract_features("https://example.com/login")
+
+    shuffled_features = dict(reversed(list(features.items())))
+
+    assert features_to_vector(shuffled_features) == [
+        features[name] for name in FEATURE_NAMES
+    ]
