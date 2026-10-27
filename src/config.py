@@ -22,6 +22,8 @@ RAW_DATASET_SHA256: Final[str] = (
     "a236549cd369cd80bd478ff8e1779cbf44c58d5c3f79f7a51a1adbed7d06d1c6"
 )
 INTERIM_DATASET_FILE: Final[Path] = INTERIM_DATA_DIR / "cleaned_phiusiil.csv"
+TRAIN_DATASET_FILE: Final[Path] = PROCESSED_DATA_DIR / "train.csv"
+TEST_DATASET_FILE: Final[Path] = PROCESSED_DATA_DIR / "test.csv"
 
 # Artifact Directories
 ARTIFACTS_DIR: Final[Path] = PROJECT_ROOT / "artifacts"
@@ -58,6 +60,15 @@ EXPECTED_INTERIM_CLASS_COUNTS: Final[dict[str, int]] = {
     "1": EXPECTED_INTERIM_LEGITIMATE_COUNT,
     "0": EXPECTED_INTERIM_PHISHING_COUNT,
 }
+
+# Phase 5 Data Splitting Invariants (Train/Test Partitioning Specification)
+SPLIT_TEST_SIZE: Final[float] = 0.20
+SPLIT_N_SPLITS: Final[int] = 5
+SPLIT_GROUP_COLUMN: Final[str] = "Domain"
+EXPECTED_TRAIN_ROW_COUNT: Final[int] = 188296
+EXPECTED_TEST_ROW_COUNT: Final[int] = 47074
+EXPECTED_TRAIN_DOMAIN_COUNT: Final[int] = 176072
+EXPECTED_TEST_DOMAIN_COUNT: Final[int] = 44014
 
 # Raw Dataset Column Exclusion Categories (Phase 2 Provenance Audit Invariants)
 EXCLUDED_METADATA_COLUMNS: Final[tuple[str, ...]] = ("FILENAME",)
