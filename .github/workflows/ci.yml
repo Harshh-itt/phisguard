@@ -29,6 +29,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e ".[ml,dev]"
           python -m pip install ruff
+
+      - name: Run Ruff Linter
         run: |
           ruff check .
       - name: Download and verify UCI dataset
